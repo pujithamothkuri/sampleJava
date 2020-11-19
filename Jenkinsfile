@@ -12,7 +12,7 @@ pipeline {
     stage('codereview-pmd') {
       post {
         success {
-          recordIssues(tools: [acuCobol()])
+          recordIssues(tools: [acuCobol()]))
         }
 
       }
