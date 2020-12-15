@@ -47,7 +47,17 @@ pipeline {
 
     stage('package') {
       steps {
-        sh '/opt/apache-maven-3.6.3/bin/mvn clean package'
+        sh 'cd $WORKSPACE'
+		    sh 'docker build -f Dockerfile -t thinkpad123/newcode:$BUILD_NUMBER '
+		    sh 'docker login -u thinkpad123 -p $DOCKER_HUB_PWD '
+		    sh 'docker push thinkpad123/newcode:$BUILD_NUMBER'
+
+      }
+    }
+    stage('deploy') {
+      steps {
+        sh 'cd $WORKSPACE/deploy'
+		    sh 'sudo su moth -c "ansible-playbook -i hosts deploy.yml -e 'env=qa build=$Package_Build_Number'"'
       }
     }
 
