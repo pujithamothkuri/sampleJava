@@ -1,8 +1,2 @@
-[qa]
-ip1
-ip2
-
-[prod]
-ip1
-ip2
-
+[ubuntu]
+34.122.78.17 anisble_user=moth anibsle_ssh_pass=moth@1234
