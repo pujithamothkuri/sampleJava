@@ -57,7 +57,7 @@ pipeline {
     stage('deploy') {
       steps {
         sh 'cd $WORKSPACE/deploy'
-		    sh 'sudo su moth -c "ansible-playbook -i hosts deploy.yml -e 'env=qa build=$Package_Build_Number'"'
+		    sh 'sudo su moth -c "ansible-playbook -i inv deploy.yml -e 'env=qa build=$Package_Build_Number'"'
       }
     }
 
