@@ -1,0 +1,40 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    #- name: Set up Node.js
+     # uses: actions/setup-node@v3
+      #with:
+       # node-version: '14' # Specify the Node.js version you need
+
+    - name: Install dependencies
+      run: npm install
+
+    #- name: Run tests
+     # run: npm test
+
+    - name: Build Docker image
+      run: |
+        docker build -t my-app-image:latest .
+        
+    - name: Push Docker image
+      env:
+        DOCKER_BUILDKIT: 1
+        DOCKER_REGISTRY: ghcr.io
+        DOCKER_USERNAME: ${{ secrets.GITHUB_ACTOR }}
+        DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo $DOCKER_PASSWORD | docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME --password-stdin
+        docker tag my-app-image:latest $DOCKER_REGISTRY/${{ github.repository }}/my-app-image:latest
+        docker push $DOCKER_REGISTRY/${{ github.repository }}/my-app-image:latest
